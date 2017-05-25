@@ -45,6 +45,13 @@ module.exports = {
         }
     },
     verify: (mobile, password, cb) => {
+        let setOnline = (user) => {
+            User.update({
+                id: user.id
+            }, {
+                status: "online"
+            }, cb);
+        };
         if (validator.isMobilePhone(mobile, 'en-IN') && !validator.isEmpty(password)) {
             User.findOne({
                 mobile: mobile,
@@ -53,7 +60,7 @@ module.exports = {
                 if (!user) {
                     throw new Error("Wrong credentials");
                 } else {
-                    cb(null, user);
+                    setOnline(user);
                 }
             }).catch((err) => {
                 cb(err);

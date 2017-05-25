@@ -19,6 +19,9 @@ module.exports = {
                     password: password
                 });
             } else {
+                req.session.auth = true;
+                req.session.userId = result.id;
+                req.session.name = result.username;
                 res.redirect('/');
             }
         });
