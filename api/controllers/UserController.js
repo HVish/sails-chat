@@ -13,7 +13,8 @@ module.exports = {
             if (err) {
                 console.error(err);
                 res.view('login', {
-                    error: true,
+                    signinError: true,
+                    signin: true,
                     mobile: mobile,
                     password: password
                 });

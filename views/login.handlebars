@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/styles/login.css">
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h2 class="display-3">Sails Chat</h2>
@@ -5,27 +6,58 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-sm-4 col-sm-push-4">
-            {{#if error}}
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>Wrong Credentials!</strong> Try again...
+        <div class="col-sm-4 col-sm-push-4 form-container">
+            <ul class="nav nav-tabs">
+                <li {{#if signin}} class="active" {{/if}}><a href="#signIn" data-toggle="tab" aria-expanded="true">Sign In</a></li>
+                <li {{#if signup}} class="active" {{/if}}><a href="#signUp" data-toggle="tab" aria-expanded="false">Sign Up</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade {{#if signin}}active in{{/if}}" id="signIn">
+                    {{#if signinError}}
+                        <div class="alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Wrong Credentials!</strong> Try again...
+                        </div>
+                    {{/if}}
+                    <form class="signin-form" action="/login" method="post">
+                        <div class="form-group">
+                            <label for="mobile">Mobile:</label>
+                            <input type="number" class="form-control" name="mobile" id="mobile" value="{{mobile}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" name="password" id="password" value="{{password}}">
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-default">Sign in</button>
+                    </form>
                 </div>
-            {{/if}}
-            <form class="login-form" action="/login" method="post">
-                <div class="form-group">
-                    <label for="mobile">Mobile:</label>
-                    <input type="number" class="form-control" name="mobile" id="mobile" value="{{mobile}}">
+                <div class="tab-pane fade {{#if signup}}active in{{/if}}" id="signUp">
+                    {{#if signupError}}
+                        <div class="alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>{{message}}</strong> Try again...
+                        </div>
+                    {{/if}}
+                    <form class="signup-form" action="" method="post">
+                        <div class="form-group">
+                            <label for="username">Name:</label>
+                            <input type="text" class="form-control" name="username" id="username" value="{{username}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile">Mobile:</label>
+                            <input type="number" class="form-control" name="mobile" id="mobile" value="{{mobile}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" name="password" id="password" value="{{password}}">
+                        </div>
+                        <button type="submit" class="btn btn-default">Sign up</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" name="password" id="password" value="{{password}}">
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox"> Remember me</label>
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
