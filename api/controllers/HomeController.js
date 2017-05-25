@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	index: (req, res) => {
+    index: (req, res) => {
         res.view('login');
     }
 };
