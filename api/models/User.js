@@ -44,7 +44,9 @@ module.exports = {
             type: 'datetime'
         }
     },
-    verify: (mobile, password, cb) => {
+    verify: (body, cb) => {
+        let mobile = body.mobile;
+        let password = body.password;
         let setOnline = (user) => {
             User.update({
                 id: user.id
@@ -67,6 +69,45 @@ module.exports = {
             });
         } else {
             cb("Invalid input");
+        }
+    },
+    register: (body, cb) => {
+        let name = body.username;
+        let mobile = body.mobile;
+        let password = body.password;
+        let start = () => {
+            User.create({
+                username: name,
+                mobile: mobile,
+                password: crypto.createHash('md5').update(password).digest("hex")
+            }).then((user) => {
+                cb(null, user);
+            }).catch((err) => {
+                console.error(err);
+                cb("Unable to create user!");
+            });
+        };
+        let checkIfExist = () => {
+            User.findOne({
+                mobile: mobile
+            }).then((user) => {
+                if (user) {
+                    throw new Error("Mobile already registered!");
+                } else {
+                    start();
+                }
+            }).catch((err) => {
+                cb(err);
+            });
+        };
+        if (!validator.isAlpha(name, 'en-IN')) {
+            cb("Invalid name");
+        } else if (!validator.isMobilePhone(mobile, 'en-IN')) {
+            cb("Invalid Mobile");
+        } else if (validator.isEmpty(password)) {
+            cb("Invalid password");
+        } else {
+            checkIfExist();
         }
     }
 };
