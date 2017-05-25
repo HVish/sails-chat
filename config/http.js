@@ -11,6 +11,9 @@
 
 module.exports.http = {
 
+    passportInit: require('passport').initialize(),
+    passportSession: require('passport').session(),
+
   /****************************************************************************
   *                                                                           *
   * Express middleware to use for every Sails request. To add custom          *
