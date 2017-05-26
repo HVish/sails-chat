@@ -109,5 +109,19 @@ module.exports = {
         } else {
             checkIfExist();
         }
+    },
+    onlineUsers: (userId, cb) => {
+        User.find({
+            id: {
+                '!': userId
+            },
+            status: 'online'
+        }).then((users) => {
+            cb(null, {
+                users: users
+            });
+        }).catch((err) => {
+            cb(err, {});
+        });
     }
 };

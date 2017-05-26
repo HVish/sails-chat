@@ -7,8 +7,26 @@
 
 module.exports = {
     index: (req, res) => {
-        res.view('login', {
-            signin: true
+        if (req.session.auth) {
+            User.onlineUsers(req.session.userId, (err, result) => {
+                if (err) {
+                    console.error(err);
+                    result.error = true;
+                }
+                res.view('home', result);
+            });
+        } else {
+            res.view('login', {
+                signin: true
+            });
+        }
+    },
+    logout: (req, res) => {
+        req.session.destroy(function(err) {
+            if (err) {
+                console.error(err);
+            }
+            res.redirect("/");
         });
     }
 };

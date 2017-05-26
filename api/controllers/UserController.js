@@ -19,8 +19,8 @@ module.exports = {
                 });
             } else {
                 req.session.auth = true;
-                req.session.userId = result.id;
-                req.session.name = result.username;
+                req.session.userId = result[0].id;
+                req.session.name = result[0].username;
                 res.redirect('/');
             }
         });

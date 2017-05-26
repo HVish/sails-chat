@@ -45,4 +45,5 @@ module.exports.routes = {
     "GET /": "HomeController.index",
     "POST /login": "UserController.verify",
     "POST /signUp": "UserController.signUp",
+    "GET /logout": "HomeController.logout",
 };
