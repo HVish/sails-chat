@@ -24,7 +24,7 @@
             </thead>
             <tbody>
                 {{#each users}}
-                    <tr>
+                    <tr id="{{this.id}}">
                         <td>{{math @index '+' 1}}</td>
                         <td>{{this.username}}</td>
                     </tr>
@@ -32,3 +32,7 @@
             </tbody>
         </table>
     </div>
+</div>
+{{> scripts}}
+<script src="/js/dependencies/sails.io.js" autoconnect="false" charset="utf-8"></script>
+<script src="/js/socket.js" charset="utf-8"></script>

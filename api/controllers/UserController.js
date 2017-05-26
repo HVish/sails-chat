@@ -4,6 +4,8 @@
  * @description :: Server-side logic for managing Users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+"use strict";
+
 const crypto = require('crypto');
 const validator = require('validator');
 module.exports = {
@@ -14,13 +16,14 @@ module.exports = {
                 res.view('login', {
                     signinError: true,
                     signin: true,
-                    mobile: mobile,
-                    password: password
+                    mobile: req.body.mobile,
+                    password: req.body.password
                 });
             } else {
                 req.session.auth = true;
                 req.session.userId = result[0].id;
                 req.session.name = result[0].username;
+                Socket.loginEvent(req.session);
                 res.redirect('/');
             }
         });

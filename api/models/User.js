@@ -123,5 +123,12 @@ module.exports = {
         }).catch((err) => {
             cb(err, {});
         });
+    },
+    setOffline: (userId, cb) => {
+        User.update({
+            id: userId
+        }, {
+            status: 'offline'
+        }, cb);
     }
 };

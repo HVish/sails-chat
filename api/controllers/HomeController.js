@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing Homes
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+"use strict";
 
 module.exports = {
     index: (req, res) => {
@@ -13,6 +14,7 @@ module.exports = {
                     console.error(err);
                     result.error = true;
                 }
+                // Socket.testConnection();
                 res.view('home', result);
             });
         } else {
@@ -22,11 +24,16 @@ module.exports = {
         }
     },
     logout: (req, res) => {
-        req.session.destroy(function(err) {
-            if (err) {
-                console.error(err);
-            }
-            res.redirect("/");
-        });
-    }
+        let destroySession = (err, user) => {
+            Socket.logoutEvent(req.session.userId);
+            req.session.destroy(function(err) {
+                if (err) {
+                    console.error(err);
+                }
+                res.redirect("/");
+            });
+        };
+        User.setOffline(req.session.userId, destroySession);
+    },
+    joinToSocket: Socket.join
 };
