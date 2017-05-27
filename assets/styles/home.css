@@ -4,3 +4,6 @@
 .sign-out {
     margin-bottom: 20px;
 }
+.chat-link {
+    cursor: pointer;
+}

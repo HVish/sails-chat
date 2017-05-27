@@ -12,7 +12,7 @@ $(document).ready(function () {
         var tbody = $('.online-user tbody');
         var row = $('<tr id="' + data.userId + '"/>');
         row.append("<td>" + (tbody.find('tr').length + 1) + "</td>");
-        row.append("<td>" + data.name + "</td>");
+        row.append('<td><a class="chat-link">' + data.name + '</a></td>');
         tbody.append(row);
     });
     socket.on("logout", function (data) {
