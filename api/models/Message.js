@@ -39,9 +39,10 @@ module.exports = {
         }
     },
     newMsg: (body, cb) => {
-        let buffer = new Buffer(body.message, "utf8");
-        body.message = Cipher.encrypt(buffer).toString("base64");
-        Message.create(body, cb);
+        let msg = Object.assign({}, body);
+        let buffer = new Buffer(msg.message, "utf8");
+        msg.message = Cipher.encrypt(buffer).toString("base64");
+        Message.create(msg, cb);
     },
     getMsg: (body, cb) => {
         Message

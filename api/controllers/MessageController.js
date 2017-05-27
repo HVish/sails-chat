@@ -15,6 +15,7 @@ module.exports = {
                     error: true
                 });
             } else {
+                Socket.newMsgEvent(req.body);
                 res.json(result);
             }
         });

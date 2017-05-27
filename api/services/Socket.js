@@ -62,5 +62,8 @@ module.exports = {
         sails.sockets.broadcast("users", "logout", {
             userId: userId
         });
+    },
+    newMsgEvent: (msg) => {
+        sails.sockets.broadcast("user" + msg.toUser, "newMsg", msg);
     }
 };
