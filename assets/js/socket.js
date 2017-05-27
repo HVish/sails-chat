@@ -18,4 +18,7 @@ $(document).ready(function () {
     socket.on("logout", function (data) {
         $('.online-user tbody tr[id="' + data.userId + '"]').remove();
     });
+    $("body").on("sendMsg", function (e) {
+        socket.post("/message/new", e.msgParams);
+    });
 });

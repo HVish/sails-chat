@@ -46,6 +46,8 @@ module.exports.routes = {
     "POST /login": "UserController.verify",
     "POST /signUp": "UserController.signUp",
     "GET /logout": "HomeController.logout",
+    "POST /message/new": "MessageController.newMsg",
+    "GET /message/old": "MessageController.getMsg",
     // socket connection
     "GET /join/user": "HomeController.joinToSocket",
 };

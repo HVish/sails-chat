@@ -1,6 +1,7 @@
 var setChatTitle;
 var appendMsg;
 var newChat;
+var sendMsg;
 $(document).ready(function() {
     newChat = function (chatBoxClass, title) {
         var dom = '<div class="chat-box ' + chatBoxClass + '">\
@@ -18,6 +19,12 @@ $(document).ready(function() {
         </div>';
         $('body .chat-box').remove();
         $('body').append(dom);
+        $('body .' + chatBoxClass).keypress(function (e) {
+            if ((e.keyCode || e.which) == 13 && !e.shiftKey) {
+                sendMsg("." + chatBoxClass);
+                return false;
+            }
+        });
     }
     setChatTitle = function(chatBox, title) {
         $(chatBox).find(".chat-title .name").html(title);
@@ -40,7 +47,7 @@ $(document).ready(function() {
             </div>');
         }
         if (isScroll) {
-            var chatBody = $(chatBox).find('.chat-body')
+            var chatBody = $(chatBox).find('.chat-body');
             chatBody.animate({
                 scrollTop: chatBody.height()
             }, 500);
@@ -62,6 +69,26 @@ $(document).ready(function() {
                     </li>\
                 </ul>\
             </div>');
+        }
+    }
+    sendMsg = function (chatBox) {
+        var msg = $(chatBox).find("#message-input").html();
+        if (msg) {
+            var date = new Date();
+            var meta = date.toLocaleTimeString("en-US", {
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric"
+            });
+            appendMsg(chatBox, msg, meta, true);
+            var event = $.Event( "sendMsg" );
+            event.msgParams = {
+                message: msg,
+                createdAt: date,
+                toUser: chatBox.split("-")[2]
+            }
+            $('body').trigger(event);
+            $(chatBox).find("#message-input").html('');
         }
     }
     $("body").on("click", ".chat-close", function () {
