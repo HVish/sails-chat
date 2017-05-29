@@ -151,7 +151,7 @@
     display: block;
 }
 
-button.btn.btn-default {
+.chat-send {
     flex-grow: 0;
     border-radius: 50%;
     height: 45px;

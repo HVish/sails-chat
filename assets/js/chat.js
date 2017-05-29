@@ -14,7 +14,7 @@ $(document).ready(function() {
             <div class="chat-body"></div>\
             <div class="chat-footer">\
                 <div id="message-input" contenteditable="true" placeholder="Type your message.."></div>\
-                <button type="button" class="btn btn-default" name="button"></button>\
+                <div class="chat-send"></div>\
             </div>\
         </div>';
         $('body .chat-box').remove();
@@ -24,6 +24,9 @@ $(document).ready(function() {
                 sendMsg("." + chatBoxClass);
                 return false;
             }
+        });
+        $('body .' + chatBoxClass + ' .chat-send').click(function () {
+            sendMsg("." + chatBoxClass);
         });
     }
     setChatTitle = function(chatBox, title) {
