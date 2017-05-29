@@ -20,12 +20,7 @@ $(document).ready(function () {
     });
     socket.on("newMsg", function (data) {
         var date = new Date(data.createdAt);
-        var meta = date.toLocaleTimeString("en-US", {
-            hour12: true,
-            hour: "numeric",
-            minute: "numeric"
-        });
-        appendMsg(".chat-box-" + data.fromUser, data.message, meta, true, true);
+        appendMsg(".chat-box-" + data.fromUser, data.message, date, true, true);
     });
     $("body").on("sendMsg", function (e) {
         socket.post("/message/new", e.msgParams);

@@ -3,7 +3,7 @@ var appendMsg;
 var newChat;
 var sendMsg;
 $(document).ready(function() {
-    newChat = function (chatBoxClass, title) {
+    newChat = function(chatBoxClass, title) {
         var dom = '<div class="chat-box ' + chatBoxClass + '">\
             <div class="chat-title">\
                 <div class="name">' + title + '</div>\
@@ -19,30 +19,53 @@ $(document).ready(function() {
         </div>';
         $('body .chat-box').remove();
         $('body').append(dom);
-        $('body .' + chatBoxClass).keypress(function (e) {
+        $('body .' + chatBoxClass).keypress(function(e) {
             if ((e.keyCode || e.which) == 13 && !e.shiftKey) {
                 sendMsg("." + chatBoxClass);
                 return false;
             }
         });
-        $('body .' + chatBoxClass + ' .chat-send').click(function () {
+        $('body .' + chatBoxClass + ' .chat-send').click(function() {
             sendMsg("." + chatBoxClass);
         });
     }
     setChatTitle = function(chatBox, title) {
         $(chatBox).find(".chat-title .name").html(title);
     }
-    appendMsg = function(chatBox, msg, meta, isScroll, isLeft) {
+    appendMsg = function(chatBox, msg, date, isScroll, isLeft) {
         var lastMsg = $(chatBox).find(".chat-body div:last-child");
         var side = isLeft ? "left" : "right";
+        var meta = date.toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric"
+        });
+        var prevDate = $(chatBox + " .chat-body div:last-child li:last-child").attr("data-date");
+        prevDate = new Date(prevDate);
+        prevDate.setHours(0, 0, 0, 0);
+
+        var tempNow = new Date(date);
+        tempNow.setHours(0, 0, 0, 0);
+
+        if (prevDate.toString() != tempNow.toString()) {
+            $(chatBox).find('.chat-body').append('<div class="meta-center">' +
+                date.toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }) +
+                '</div>');
+        }
+
         if (lastMsg.hasClass(side)) {
-            lastMsg.find(".messages").append('<li><span class="message">' + msg +
+            lastMsg.find(".messages").append(
+                '<li data-date="' + date + '"><span class="message">' + msg +
                 '</span><span class="meta">' + meta + '</span></li>');
         } else {
             $(chatBox).find('.chat-body').append('\
             <div class="' + side + '">\
                 <ul class="messages">\
-                    <li>\
+                    <li data-date="' + date + '">\
                         <span class="message">' + msg + '</span>\
                         <span class="meta">' + meta + '</span>\
                     </li>\
@@ -56,9 +79,14 @@ $(document).ready(function() {
             }, 0);
         }
     }
-    prependMsg = function(chatBox, msg, meta, isLeft) {
+    prependMsg = function(chatBox, msg, date, isLeft) {
         var firstMsg = $(chatBox).find(".chat-body div:first-child");
         var side = isLeft ? "left" : "right";
+        var meta = date.toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric"
+        });
         if (firstMsg.hasClass(side)) {
             firstMsg.find(".messages").prepend('<li><span class="message">' + msg +
                 '</span><span class="meta">' + meta + '</span></li>');
@@ -74,17 +102,12 @@ $(document).ready(function() {
             </div>');
         }
     }
-    sendMsg = function (chatBox) {
+    sendMsg = function(chatBox) {
         var msg = $(chatBox).find("#message-input").html();
         if (msg) {
             var date = new Date();
-            var meta = date.toLocaleTimeString("en-US", {
-                hour12: true,
-                hour: "numeric",
-                minute: "numeric"
-            });
-            appendMsg(chatBox, msg, meta, true);
-            var event = $.Event( "sendMsg" );
+            appendMsg(chatBox, msg, date, true);
+            var event = $.Event("sendMsg");
             event.msgParams = {
                 message: msg,
                 createdAt: date,
@@ -94,7 +117,7 @@ $(document).ready(function() {
             $(chatBox).find("#message-input").html('');
         }
     }
-    $("body").on("click", ".chat-close", function () {
+    $("body").on("click", ".chat-close", function() {
         $(this).parents('.chat-box').remove();
     });
 

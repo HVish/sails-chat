@@ -126,6 +126,11 @@
     right: 15px;
 }
 
+.meta-center {
+    text-align: center;
+    clear: both;
+}
+
 .chat-footer {
     display: flex;
     align-items: stretch;
