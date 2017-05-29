@@ -131,6 +131,11 @@
     clear: both;
 }
 
+.meta-center .load-older-msg {
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .chat-footer {
     display: flex;
     align-items: stretch;

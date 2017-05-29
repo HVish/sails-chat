@@ -2,6 +2,7 @@ var setChatTitle;
 var appendMsg;
 var newChat;
 var sendMsg;
+var olderMsgTag;
 $(document).ready(function() {
     newChat = function(userId, title) {
         var chatBoxClass = "chat-box-" + userId;
@@ -12,7 +13,11 @@ $(document).ready(function() {
                     <span aria-hidden="true">&times;</span>\
                 </button>\
             </div>\
-            <div class="chat-body"></div>\
+            <div class="chat-body">\
+                <div class="meta-center">\
+                    <a class="load-older-msg">Load older messages</a>\
+                </div>\
+            </div>\
             <div class="chat-footer">\
                 <div id="message-input" contenteditable="true" placeholder="Type your message.."></div>\
                 <div class="chat-send"></div>\
@@ -29,7 +34,25 @@ $(document).ready(function() {
         $('body .' + chatBoxClass + ' .chat-send').click(function() {
             sendMsg("." + chatBoxClass);
         });
+        $('body').on('click', '.' + chatBoxClass + ' .load-older-msg', function() {
+            var event = $.Event("loadOlderMsg");
+            event.msgParams = {
+                userId: userId,
+                skip: $('.' + chatBoxClass + ' .chat-body li').length
+            }
+            $(this).parents('div.meta-center').remove();
+            $('body').trigger(event);
+        });
     }
+
+    olderMsgTag = function(chatBox) {
+        $(chatBox + ' .chat-body').prepend(
+            '<div class="meta-center">\
+                <a class="load-older-msg">Load older messages</a>\
+            </div>'
+        );
+    }
+
     setChatTitle = function(chatBox, title) {
         $(chatBox).find(".chat-title .name").html(title);
     }
@@ -81,28 +104,52 @@ $(document).ready(function() {
         }
     }
     prependMsg = function(chatBox, msg, date, isLeft) {
-        var firstMsg = $(chatBox).find(".chat-body div:first-child");
+        var firstMsg = $(chatBox).find(".chat-body div:nth-child(2)");
         var side = isLeft ? "left" : "right";
         var meta = date.toLocaleTimeString("en-US", {
             hour12: true,
             hour: "numeric",
             minute: "numeric"
         });
+
+        var nextDate = firstMsg.find("li:first-child").attr("data-date");
+        nextDate = new Date(nextDate);
+        nextDate.setHours(0, 0, 0, 0);
+
+        var tempNow = new Date(date);
+        tempNow.setHours(0, 0, 0, 0);
+
+        if (nextDate.toString() == tempNow.toString()) {
+            $(chatBox + ' .chat-body div:first-child').remove();
+        }
+
         if (firstMsg.hasClass(side)) {
-            firstMsg.find(".messages").prepend('<li><span class="message">' + msg +
+            firstMsg.find(".messages").prepend(
+                '<li data-date="' + date + '"><span class="message">' + msg +
                 '</span><span class="meta">' + meta + '</span></li>');
         } else {
             $(chatBox).find('.chat-body').prepend('\
             <div class="' + side + '">\
                 <ul class="messages">\
-                    <li>\
+                    <li data-date="' + date + '">\
                         <span class="message">' + msg + '</span>\
                         <span class="meta">' + meta + '</span>\
                     </li>\
                 </ul>\
             </div>');
         }
+
+        $(chatBox).find('.chat-body').prepend(
+            '<div class="meta-center">' +
+            date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }) +
+            '</div>'
+        );
     }
+
     sendMsg = function(chatBox) {
         var msg = $(chatBox).find("#message-input").html();
         if (msg) {

@@ -49,11 +49,11 @@ module.exports = {
             .find({
                 or: [{
                         toUser: body.userId,
-                        fromUser:body.myId
+                        fromUser: body.myId
                     },
                     {
                         toUser: body.myId,
-                        fromUser:body.userId
+                        fromUser: body.userId
                     }
                 ]
             })
