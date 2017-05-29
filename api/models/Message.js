@@ -57,7 +57,7 @@ module.exports = {
             })
             .skip(body.skip || 0)
             .limit(20)
-            .sort("createdAt ASC")
+            .sort("createdAt DESC")
             .then((messages) => {
                 for (let i = 0; i < messages.length; i++) {
                     let buffer = new Buffer(messages[i].message, "base64");

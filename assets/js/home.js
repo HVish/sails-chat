@@ -7,7 +7,7 @@ $(document).ready(function() {
             userId: userId
         }).done(function(data) {
             if (!data.error) {
-                for (var i = 0; i < data.length; i++) {
+                for (var i = (data.length - 1); i > -1; i--) {
                     var date = new Date(data[i].createdAt);
                     var meta = date.toLocaleTimeString("en-US", {
                         hour12: true,
