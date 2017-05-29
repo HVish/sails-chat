@@ -112,7 +112,7 @@ $(document).ready(function() {
             event.msgParams = {
                 message: msg,
                 createdAt: date,
-                toUser: chatBox.attr("data-userId")
+                toUser: $(chatBox).attr("data-userId")
             }
             $('body').trigger(event);
             $(chatBox).find("#message-input").html('');
