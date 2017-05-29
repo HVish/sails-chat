@@ -48,10 +48,12 @@ module.exports = {
         Message
             .find({
                 or: [{
-                        toUser: body.userId
+                        toUser: body.userId,
+                        fromUser:body.myId
                     },
                     {
-                        fromUser: body.userId
+                        toUser: body.myId,
+                        fromUser:body.userId
                     }
                 ]
             })
