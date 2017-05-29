@@ -49,8 +49,8 @@ $(document).ready(function() {
         if (isScroll) {
             var chatBody = $(chatBox).find('.chat-body');
             chatBody.animate({
-                scrollTop: chatBody.height()
-            }, 500);
+                scrollTop: chatBody.prop("scrollHeight")
+            }, 0);
         }
     }
     prependMsg = function(chatBox, msg, meta, isLeft) {
