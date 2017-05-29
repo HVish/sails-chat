@@ -3,8 +3,9 @@ var appendMsg;
 var newChat;
 var sendMsg;
 $(document).ready(function() {
-    newChat = function(chatBoxClass, title) {
-        var dom = '<div class="chat-box ' + chatBoxClass + '">\
+    newChat = function(userId, title) {
+        var chatBoxClass = "chat-box-" + userId;
+        var dom = '<div class="chat-box ' + chatBoxClass + '" data-userId="' + userId + '">\
             <div class="chat-title">\
                 <div class="name">' + title + '</div>\
                 <button type="button" class="chat-close close" aria-label="Close">\
@@ -111,7 +112,7 @@ $(document).ready(function() {
             event.msgParams = {
                 message: msg,
                 createdAt: date,
-                toUser: chatBox.split("-")[2]
+                toUser: chatBox.attr("data-userId")
             }
             $('body').trigger(event);
             $(chatBox).find("#message-input").html('');
