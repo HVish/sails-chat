@@ -44,32 +44,30 @@ module.exports = {
             type: 'datetime'
         }
     },
-    verify: (body, cb) => {
+    verify: (body) => {
+
         let mobile = body.mobile;
         let password = body.password;
-        let setOnline = (user) => {
-            User.update({
-                id: user.id
-            }, {
-                status: "online"
-            }, cb);
-        };
+
         if (validator.isMobilePhone(mobile, 'en-IN') && !validator.isEmpty(password)) {
-            User.findOne({
+
+            let search = {
                 mobile: mobile,
                 password: crypto.createHash('md5').update(password).digest("hex")
-            }).then((user) => {
-                if (!user) {
-                    throw new Error("Wrong credentials");
-                } else {
-                    setOnline(user);
-                }
-            }).catch((err) => {
-                cb(err);
-            });
-        } else {
-            cb("Invalid input");
+            };
+
+            try {
+                let user = AsyncAwait.await(User.findOne(search));
+                if (!user) return { err: "Wrong credentials", result: null };
+                user = AsyncAwait.await(User.update({ id: user.id }, { status: "online" }));
+                return {err: null, result: user};
+            } catch (e) {
+                console.log(e);
+                return { err: "Internal server error occured!", result: null };
+            }
         }
+
+        return { err: "Invalid input", result: null };
     },
     register: (body, cb) => {
         let name = body.username;

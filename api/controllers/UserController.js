@@ -9,25 +9,28 @@
 const crypto = require('crypto');
 const validator = require('validator');
 module.exports = {
-    verify: (req, res) => {
-        User.verify(req.body, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.view('login', {
-                    signinError: true,
-                    signin: true,
-                    mobile: req.body.mobile,
-                    password: req.body.password
-                });
-            } else {
-                req.session.auth = true;
-                req.session.userId = result[0].id;
-                req.session.name = result[0].username;
-                Socket.loginEvent(req.session);
-                res.redirect('/');
-            }
-        });
-    },
+    verify: AsyncAwait.async((req, res) => {
+
+        let {err, result} = AsyncAwait.await(User.verify(req.body));
+
+        if (err) {
+            console.error(err);
+            res.view('login', {
+                signinError: true,
+                errMsg: err,
+                signin: true,
+                mobile: req.body.mobile,
+                password: req.body.password
+            });
+        } else {
+            req.session.auth = true;
+            req.session.userId = result[0].id;
+            req.session.name = result[0].username;
+            Socket.loginEvent(req.session);
+            res.redirect('/');
+        }
+
+    }),
     signUp: (req, res) => {
         User.register(req.body, (err, result) => {
             if (err) {

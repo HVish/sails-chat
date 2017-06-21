@@ -16,7 +16,7 @@
                     {{#if signinError}}
                         <div class="alert alert-dismissible alert-danger">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Wrong Credentials!</strong> Try again...
+                            <strong>{{errMsg}}</strong> Try again...
                         </div>
                     {{/if}}
                     {{#if signupSuccess}}
